@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${pkg}.${moduleName}.mapper.${className}Mapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="${pkg}.${moduleName}.entity.${className}Entity" id="${classname}Map">
+#foreach($column in $columns)
+    #if($column.columnName.equals("${pk.columnName}"))
+        <id property="${column.attrname}" column="${column.columnName}"/>
+    #else
+        <result property="${column.attrname}" column="${column.columnName}"/>
+    #end
+#end
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,80 @@
+package ${pkg}.${moduleName}.entity;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+#if(${hasFillField})
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+#end
+import java.io.Serializable;
+#if(${enableSwagger})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+#if(${hasDate})
+import java.util.Date;
+#end
+#if(${enableLombok})
+import lombok.Data;
+#end
+
+
+
+/**
+ * $!{comments}
+ * 
+ * @author $!{author}
+ * @email $!{email}
+ * @date $!{datetime}
+ */
+#if(${enableLombok})
+@Data
+#end
+@TableName("${tableName}")
+#if(${enableSwagger})
+@ApiModel(value="${className}", description="$!{comments}")
+#end
+public class ${className}Entity implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+#foreach ($column in $columns)
+	#if(${enableSwagger})
+	@ApiModelProperty("$!{column.comment}")
+	#else
+	/**
+	 * $!{column.comment}
+	 */
+	#end
+	#if($column.columnName.equals("${pk.columnName}"))
+		#if($column.extra.equals("auto_increment"))
+	@TableId(value = "${pk.columnName}", type = IdType.AUTO)
+		#else
+	@TableId
+		#end
+	#end
+	#if(!${column.fill})
+	@TableField(fill = ${column.fill})
+	#end
+	private $column.attrType $column.attrname;
+#end
+
+#if(!${enableLombok})
+	#foreach ($column in $columns)
+		#if(${column.attrType.equals("Boolean")})
+			#set($getprefix="is")
+		#else
+			#set($getprefix="get")
+		#end
+	public ${column.attrType} ${getprefix}${column.attrName}() {
+		return this.${column.attrname};
+	}
+	public void set${column.attrName}(${column.attrType} ${column.attrname}){
+		this.${column.attrname} = ${column.attrname};
+	}
+	#end
+#end
+
+}
