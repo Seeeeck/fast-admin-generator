@@ -2,25 +2,26 @@ package pers.syq.fastadmin.generator.module;
 
 import lombok.Data;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 
 @Data
 public class GlobalConfigEntity {
+    @NotBlank
     private String pkg;
+    @NotBlank
     private String moduleName;
     private String tablePrefix;
-    private boolean enableSwagger;
-    private boolean enableLombok;
-    private boolean hasFillField;
+    @NotNull
+    private Boolean enableSwagger;
+    @NotNull
+    private Boolean enableLombok;
+    @NotBlank
     private String author;
+    @NotBlank
+    @Email
     private String email;
 
-    public GlobalConfigEntity() {
-        this.pkg = "com.example";
-        this.moduleName = "module";
-        this.enableSwagger = false;
-        this.enableLombok = true;
-        this.hasFillField = false;
-        this.author = "author";
-        this.email = "example@email.com";
-    }
 }

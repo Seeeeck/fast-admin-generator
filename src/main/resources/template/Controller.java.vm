@@ -26,7 +26,6 @@ import ${pkg}.common.utils.R;
 
 
 /**
- * $!{comments}
  *
  * @author $!{author}
  * @email $!{email}

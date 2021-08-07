@@ -23,6 +23,19 @@ public class TableContext {
 
     private boolean hasDate;
 
+    private boolean hasFillField;
+
+
+
+
+    public boolean getHasFillField() {
+        return hasFillField;
+    }
+
+    public void setHasFillField(boolean hasFillField) {
+        this.hasFillField = hasFillField;
+    }
+
     public String getTableName() {
         return tableName;
     }

@@ -24,7 +24,6 @@ import lombok.Data;
 
 
 /**
- * $!{comments}
  * 
  * @author $!{author}
  * @email $!{email}
@@ -35,7 +34,7 @@ import lombok.Data;
 #end
 @TableName("${tableName}")
 #if(${enableSwagger})
-@ApiModel(value="${className}", description="$!{comments}")
+@ApiModel(value="${className}", description="$!{comment}")
 #end
 public class ${className}Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -55,7 +54,7 @@ public class ${className}Entity implements Serializable {
 	@TableId
 		#end
 	#end
-	#if(!${column.fill})
+	#if(${column.fill})
 	@TableField(fill = ${column.fill})
 	#end
 	private $column.attrType $column.attrname;

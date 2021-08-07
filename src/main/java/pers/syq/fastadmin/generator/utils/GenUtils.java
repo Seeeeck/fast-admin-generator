@@ -15,7 +15,7 @@ import pers.syq.fastadmin.generator.entity.ColumnEntity;
 import pers.syq.fastadmin.generator.entity.TableContext;
 import pers.syq.fastadmin.generator.entity.TableEntity;
 import pers.syq.fastadmin.generator.enums.FieldFill;
-import pers.syq.fastadmin.generator.module.GlobalConfigEntity;
+import pers.syq.fastadmin.generator.module.GeneratorData;
 import pers.syq.fastadmin.generator.vo.ColumnFillVo;
 
 import java.io.File;
@@ -43,22 +43,22 @@ public class GenUtils {
     }
 
 
-    public static void generatorCode(GlobalConfigEntity globalConfig, List<ColumnFillVo> columnFillVos, TableEntity tableEntity, List<ColumnEntity> columnEntities, ZipOutputStream zip) {
-        TableContext tableContext = createTableContext(tableEntity, globalConfig, columnEntities, columnFillVos);
+    public static void generatorCode(List<ColumnFillVo> columnFillVos, TableEntity tableEntity, List<ColumnEntity> columnEntities, ZipOutputStream zip) {
+        TableContext tableContext = createTableContext(tableEntity, columnEntities, columnFillVos);
         initVelocity();
-        VelocityContext context = createVelocityContext(tableContext,globalConfig);
+        VelocityContext context = createVelocityContext(tableContext);
         List<String> templates = getTemplates();
         for (String template : templates) {
-            generateFile2Zip(context,tableContext,globalConfig,template,zip);
+            generateFile2Zip(context,tableContext,template,zip);
         }
     }
 
-    private static void generateFile2Zip(VelocityContext context, TableContext tableContext, GlobalConfigEntity globalConfig, String template, ZipOutputStream zip){
+    private static void generateFile2Zip(VelocityContext context, TableContext tableContext, String template, ZipOutputStream zip){
         StringWriter sw = new StringWriter();
         Template tpl = Velocity.getTemplate(template, "UTF-8");
         tpl.merge(context, sw);
         try {
-            String fileName = getFileName(template, tableContext.getClassName(), globalConfig.getPkg(), globalConfig.getModuleName());
+            String fileName = getFileName(template, tableContext.getClassName(), GeneratorData.globalConfig.getPkg(), GeneratorData.globalConfig.getModuleName());
             zip.putNextEntry(new ZipEntry(fileName));
             IoUtil.write(zip, StandardCharsets.UTF_8,false,sw.toString());
         } catch (IOException e) {
@@ -74,15 +74,16 @@ public class GenUtils {
         }
     }
 
-    private static TableContext createTableContext(TableEntity tableEntity,GlobalConfigEntity globalConfig,List<ColumnEntity> columnEntities,List<ColumnFillVo> columnFillVos){
+    private static TableContext createTableContext(TableEntity tableEntity,List<ColumnEntity> columnEntities,List<ColumnFillVo> columnFillVos){
         TableContext tableContext = new TableContext();
-        setTableContextProperties(tableContext,tableEntity,globalConfig);
+        setTableContextProperties(tableContext,tableEntity);
+        tableContext.setHasFillField(columnFillVos != null && !columnFillVos.isEmpty());
         List<ColumnContext> columnContexts = new ArrayList<>();
         Props convertProps = PropsUtil.get("generator.properties");
         for (ColumnEntity columnEntity : columnEntities) {
             ColumnContext columnContext = new ColumnContext();
             String attrType = convertProps.getStr(columnEntity.getDataType(), "String");
-            setColumnContextProperties(columnContext,columnEntity,columnFillVos,globalConfig,attrType);
+            setColumnContextProperties(columnContext,columnEntity,columnFillVos,attrType);
             setTableContextProperties(tableContext,attrType,columnContext,columnEntity);
             columnContexts.add(columnContext);
         }
@@ -93,18 +94,18 @@ public class GenUtils {
         return tableContext;
     }
 
-    private static VelocityContext createVelocityContext(TableContext tableContext, GlobalConfigEntity globalConfig) {
+    private static VelocityContext createVelocityContext(TableContext tableContext) {
         Map<String, Object> map = BeanUtil.beanToMap(tableContext);
         map.put("datetime", DateUtil.today());
-        map.putAll(BeanUtil.beanToMap(globalConfig));
+        map.putAll(BeanUtil.beanToMap(GeneratorData.globalConfig));
         return new VelocityContext(map);
     }
 
-    private static void setTableContextProperties(TableContext tableContext, TableEntity tableEntity, GlobalConfigEntity globalConfig){
+    private static void setTableContextProperties(TableContext tableContext, TableEntity tableEntity){
         BeanUtil.copyProperties(tableEntity,tableContext);
         String tableName = tableEntity.getTableName();
-        if (StrUtil.isNotEmpty(globalConfig.getTablePrefix())){
-            tableName = tableName.replaceFirst(globalConfig.getTablePrefix(),"");
+        if (StrUtil.isNotEmpty(GeneratorData.globalConfig.getTablePrefix())){
+            tableName = tableName.replaceFirst(GeneratorData.globalConfig.getTablePrefix(),"");
         }
         String classname = StrUtil.toCamelCase(tableName);
         tableContext.setClassname(classname);
@@ -112,19 +113,21 @@ public class GenUtils {
         tableContext.setPathName(classname.toLowerCase());
     }
 
-    private static void setColumnContextProperties(ColumnContext columnContext,ColumnEntity columnEntity,List<ColumnFillVo> columnFillVos,GlobalConfigEntity globalConfig,String attrType){
+    private static void setColumnContextProperties(ColumnContext columnContext,ColumnEntity columnEntity,List<ColumnFillVo> columnFillVos,String attrType){
         BeanUtil.copyProperties(columnEntity,columnContext);
         String attrname = StrUtil.toCamelCase(columnEntity.getColumnName());
         columnContext.setAttrname(attrname);
         columnContext.setAttrName(StrUtil.upperFirst(attrname));
         columnContext.setAttrType(attrType);
-        for (ColumnFillVo columnFillVo : columnFillVos) {
-            if (columnEntity.getColumnName().equals(columnFillVo.getColumnName())){
-                columnContext.setFill(FieldFill.getFieldFill(columnFillVo.getFillCode()));
-                globalConfig.setHasFillField(true);
-                break;
+        if (columnFillVos != null){
+            for (ColumnFillVo columnFillVo : columnFillVos) {
+                if (columnEntity.getColumnName().equals(columnFillVo.getColumnName())){
+                    columnContext.setFill(FieldFill.getFieldFill(columnFillVo.getFillCode()));
+                    break;
+                }
             }
         }
+
     }
 
     private static void setTableContextProperties(TableContext tableContext,String attrType,ColumnContext columnContext,ColumnEntity columnEntity){

@@ -1,7 +1,6 @@
 package pers.syq.fastadmin.generator.service;
 
 import cn.hutool.core.io.IoUtil;
-import com.sun.xml.internal.org.jvnet.fastinfoset.FastInfosetException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.BeanCreationException;
@@ -19,7 +18,6 @@ import pers.syq.fastadmin.generator.entity.TableEntity;
 
 import pers.syq.fastadmin.generator.module.GeneratorData;
 import pers.syq.fastadmin.generator.utils.GenUtils;
-import pers.syq.fastadmin.generator.vo.GeneratorVo;
 import pers.syq.fastadmin.generator.vo.TableInfoVo;
 
 import javax.sql.DataSource;
@@ -90,13 +88,13 @@ public class GeneratorService {
          return generatorMapper.selectColumnListByTableName(tableName);
     }
 
-    public byte[] generateCode(GeneratorVo generatorVo){
+    public byte[] generateCode(List<TableInfoVo> tableInfos){
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
-        for (TableInfoVo tableInfo : generatorVo.getTableInfos()) {
+        for (TableInfoVo tableInfo : tableInfos) {
             TableEntity tableEntity = generatorMapper.selectTableByTableName(tableInfo.getTableName());
             List<ColumnEntity> columnEntities = generatorMapper.selectColumnListByTableName(tableInfo.getTableName());
-            GenUtils.generatorCode(generatorVo.getGlobalConfig(),tableInfo.getColumnFillVos(),tableEntity,columnEntities,zip);
+            GenUtils.generatorCode(tableInfo.getColumnFillVos(),tableEntity,columnEntities,zip);
         }
         IoUtil.close(zip);
         return outputStream.toByteArray();
