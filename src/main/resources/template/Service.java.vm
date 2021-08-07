@@ -13,7 +13,6 @@ import java.util.Map;
  * @date $!{datetime}
  */
 public interface ${className}Service extends IService<${className}Entity> {
-
     PageUtils queryPage(Map<String, Object> params);
 }
 

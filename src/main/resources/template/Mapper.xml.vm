@@ -6,13 +6,12 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="${pkg}.${moduleName}.entity.${className}Entity" id="${classname}Map">
 #foreach($column in $columns)
-    #if($column.columnName.equals("${pk.columnName}"))
+#if($column.columnName.equals("${pk.columnName}"))
         <id property="${column.attrname}" column="${column.columnName}"/>
-    #else
+#else
         <result property="${column.attrname}" column="${column.columnName}"/>
-    #end
+#end
 #end
     </resultMap>
-
 
 </mapper>

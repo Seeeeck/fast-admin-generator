@@ -2,4 +2,4 @@ server:
   port: 8000
 mybatis-plus:
   mapperLocations: classpath:mapper/**/*.xml
-debug: true
+spring:
