@@ -1,13 +1,13 @@
 # Fast Admin Generator
 
 ## What does it do
-
-used to generate code for CRUD.
+To generate the code for CRUD.
 
 ## frameworks
 
-require Java frameworks: Spring Boot,Mybatis plus
-option frameworks: Lombok,Swagger
+**Require Java frameworks**: Spring Boot,Mybatis plus
+
+**Option frameworks**: Lombok,Swagger
 
 ## Quick Start
 
