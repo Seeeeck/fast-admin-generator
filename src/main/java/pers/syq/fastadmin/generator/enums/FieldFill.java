@@ -1,7 +1,7 @@
 package pers.syq.fastadmin.generator.enums;
 
 public enum FieldFill {
-    NULL(0,null),
+    NONE(0,null),
     DEFAULT(1,"FieldFill.DEFAULT"),
     INSERT(2,"FieldFill.INSERT"),
     UPDATE(3,"FieldFill.UPDATE"),
@@ -22,7 +22,7 @@ public enum FieldFill {
                 return fieldFill;
             }
         }
-        return NULL;
+        return NONE;
     }
 
     public Integer getCode() {

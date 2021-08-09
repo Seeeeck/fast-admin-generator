@@ -1,11 +1,7 @@
 package ${pkg}.${moduleName}.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-#if(${hasFillField})
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-#end
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 #if(${enableSwagger})
 import io.swagger.annotations.ApiModel;
@@ -48,11 +44,13 @@ public class ${className}Entity implements Serializable {
 	 */
 #end
 #if($column.columnName.equals("${pk.columnName}"))
-#if($column.extra.equals("auto_increment"))
-	@TableId(value = "${pk.columnName}", type = IdType.AUTO)
-#else
-	@TableId
+	@TableId(value = "${pk.columnName}", type = ${idType})
 #end
+#if(${column.version})
+	@Version
+#end
+#if(${column.logic})
+	@TableLogic
 #end
 #if(${column.fill})
 	@TableField(fill = ${column.fill})

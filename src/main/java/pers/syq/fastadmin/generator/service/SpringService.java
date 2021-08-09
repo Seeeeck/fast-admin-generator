@@ -8,6 +8,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class SpringService implements ApplicationContextAware {
 
@@ -54,5 +59,12 @@ public class SpringService implements ApplicationContextAware {
             return applicationContext.getBean(clazz);
         }
         return null;
+    }
+
+    public <T> Collection<T> getBeans(Class<T> clazz){
+        if (applicationContext != null){
+            return applicationContext.getBeansOfType(clazz).values();
+        }
+        return Collections.emptyList();
     }
 }

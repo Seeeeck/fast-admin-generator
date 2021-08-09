@@ -1,6 +1,7 @@
 package pers.syq.fastadmin.generator.entity;
 
-import lombok.Data;
+import pers.syq.fastadmin.generator.enums.IdType;
+
 import java.util.List;
 
 public class TableContext {
@@ -23,18 +24,18 @@ public class TableContext {
 
     private boolean hasDate;
 
-    private boolean hasFillField;
 
 
+    private IdType idType;
 
-
-    public boolean getHasFillField() {
-        return hasFillField;
+    public IdType getIdType() {
+        return idType;
     }
 
-    public void setHasFillField(boolean hasFillField) {
-        this.hasFillField = hasFillField;
+    public void setIdType(IdType idType) {
+        this.idType = idType;
     }
+
 
     public String getTableName() {
         return tableName;

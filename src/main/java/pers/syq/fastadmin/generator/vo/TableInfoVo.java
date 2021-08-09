@@ -12,6 +12,9 @@ public class TableInfoVo {
     @NotBlank
     private String tableName;
 
+    @NotNull
+    private Integer idTypeCode;
+
     @Valid
-    private List<ColumnFillVo> columnFillVos;
+    private List<ColumnInfoVo> columnInfoVos;
 }

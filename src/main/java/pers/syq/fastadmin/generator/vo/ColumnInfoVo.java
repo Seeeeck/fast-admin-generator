@@ -6,9 +6,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class ColumnFillVo {
+public class ColumnInfoVo {
     @NotBlank
     private String columnName;
     @NotNull
     private Integer fillCode;
+    @NotNull
+    private Boolean version;
+    @NotNull
+    private Boolean logic;
 }

@@ -1,6 +1,7 @@
 package pers.syq.fastadmin.generator.entity;
 
 import pers.syq.fastadmin.generator.enums.FieldFill;
+import pers.syq.fastadmin.generator.enums.IdType;
 
 
 public class ColumnContext {
@@ -20,6 +21,28 @@ public class ColumnContext {
     private String extra;
     // null default insert update insert_update
     private FieldFill fill;
+
+    private Boolean version;
+
+    private Boolean logic;
+
+
+    public Boolean getVersion() {
+        return version;
+    }
+
+    public void setVersion(Boolean version) {
+        this.version = version;
+    }
+
+    public Boolean getLogic() {
+        return logic;
+    }
+
+    public void setLogic(Boolean logic) {
+        this.logic = logic;
+    }
+
 
     public String getColumnName() {
         return columnName;
