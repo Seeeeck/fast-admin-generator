@@ -16,7 +16,7 @@ To generate the code for CRUD.
 
 <img src="https://github.com/Seeeeck/fast-admin-generator/blob/master/imgs/step1.png" alt="step1" width="800" />
 
-### Step 2:Set the datasource and configuration about tables.
+### Step 2:Set the datasource and configuration.
 
 <img src="https://github.com/Seeeeck/fast-admin-generator/blob/master/imgs/step2-1.png" alt="step2" width="800" />
 
