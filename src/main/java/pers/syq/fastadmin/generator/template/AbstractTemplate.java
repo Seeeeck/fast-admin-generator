@@ -21,19 +21,43 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * Generator template
+ */
 public abstract class AbstractTemplate {
-    abstract boolean toResources();
+    /**
+     * Whether the file is in the resources directory
+     * @return
+     */
+    protected abstract boolean toResources();
 
-    abstract String outputFilePath();
+    /**
+     * Where to put the file
+     * Enter the path after the module directory or resources directory
+     * E.g: if the file is in the "java/com/example/project/moduleName/controller",just enter "controller".
+     *  if the file is in the "classpath:resources/static/js/" ,enter "static/js".
+     * @return
+     */
+    protected abstract String outputFilePath();
 
-    abstract String templateFileName();
+    /**
+     * The file name of the file placed in the "classpath:resources/template/"
+     * @return
+     */
+    protected abstract String templateFileName();
 
-    abstract Map<String, Object> addExtraObjectMap();
+    /**
+     * The map will be put into the VelocityContext.And you can use properties of the map in the velocity template.
+     * @return
+     */
+    protected abstract Map<String, Object> addExtraObjectMap();
+
+
 
     public void generateCode(Map<String,Object> objectMap,ZipOutputStream zip){
         VelocityContext velocityContext = createVelocityContext(objectMap);
         Object className = velocityContext.get("className");
-        if (className == null){
+        if (className == null) {
             throw new FastAdminException("Unknown error", HttpStatus.HTTP_INTERNAL_ERROR);
         }
         StringWriter sw = new StringWriter();
@@ -43,7 +67,17 @@ public abstract class AbstractTemplate {
         write2Zip(zip,sw,fileName);
     }
 
-    private void write2Zip(ZipOutputStream zip,StringWriter sw,String fileName){
+    protected VelocityContext createVelocityContext(Map<String,Object> objectMap){
+        objectMap.putAll(addExtraObjectMap());
+        if (GeneratorData.globalConfig != null) {
+            Map<String, Object> globalConfigMap = BeanUtil.beanToMap(GeneratorData.globalConfig);
+            objectMap.putAll(globalConfigMap);
+        }
+        objectMap.put("datetime", DateUtil.today());
+        return new VelocityContext(objectMap);
+    }
+
+    protected void write2Zip(ZipOutputStream zip,StringWriter sw,String fileName){
         try {
             zip.putNextEntry(new ZipEntry(fileName));
             IoUtil.write(zip, StandardCharsets.UTF_8,false,sw.toString());
@@ -60,7 +94,7 @@ public abstract class AbstractTemplate {
         }
     }
 
-    private String absoluteOutputFilePath(String className){
+    protected String absoluteOutputFilePath(String className){
         if (GeneratorData.globalConfig == null){
             throw new FastAdminException(ErrorCode.NULL_GLOBAL_CONFIG);
         }
@@ -69,8 +103,14 @@ public abstract class AbstractTemplate {
         if (toResources()){
             path += "resources" + File.separator;
         }else {
-            path += "java" + File.separator + globalConfig.getPkg().replace(".",File.separator) +
-                    File.separator + globalConfig.getModuleName() + File.separator;
+            if(isCommon()){
+                path += "java" + File.separator + globalConfig.getPkg().replace(".",File.separator) +
+                        File.separator + "common" + File.separator;
+            }else {
+                path += "java" + File.separator + globalConfig.getPkg().replace(".",File.separator) +
+                        File.separator + globalConfig.getModuleName() + File.separator;
+            }
+
         }
         return addFileName(path,className);
     }
@@ -103,17 +143,13 @@ public abstract class AbstractTemplate {
         return templateFileName().substring(0,templateFileName().lastIndexOf("."));
     }
 
-    private VelocityContext createVelocityContext(Map<String,Object> objectMap){
-        objectMap.putAll(addExtraObjectMap());
-        if (GeneratorData.globalConfig != null) {
-            Map<String, Object> globalConfigMap = BeanUtil.beanToMap(GeneratorData.globalConfig);
-            objectMap.putAll(globalConfigMap);
-        }
-        objectMap.put("datetime", DateUtil.today());
-        return new VelocityContext(objectMap);
+
+
+    protected String absoluteTemplateFilePath(){
+        return "template" + File.separator + templateFileName();
     }
 
-    private String absoluteTemplateFilePath(){
-        return "template" + File.separator + templateFileName();
+    public boolean isCommon(){
+        return false;
     }
 }

@@ -9,22 +9,22 @@ import java.util.Map;
 @Component
 public class ServiceImplTemplate extends AbstractTemplate{
     @Override
-    boolean toResources() {
+    protected boolean toResources() {
         return false;
     }
 
     @Override
-    String outputFilePath() {
+    protected String outputFilePath() {
         return "service" + File.separator + "impl";
     }
 
     @Override
-    String templateFileName() {
+    protected String templateFileName() {
         return "serviceImpl.java.vm";
     }
 
     @Override
-    Map<String, Object> addExtraObjectMap() {
+    protected Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

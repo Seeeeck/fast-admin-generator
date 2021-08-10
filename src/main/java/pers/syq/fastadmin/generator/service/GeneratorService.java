@@ -30,11 +30,13 @@ import pers.syq.fastadmin.generator.entity.TableEntity;
 import pers.syq.fastadmin.generator.module.GeneratorData;
 import pers.syq.fastadmin.generator.template.AbstractTemplate;
 import pers.syq.fastadmin.generator.vo.ColumnInfoVo;
+import pers.syq.fastadmin.generator.vo.GeneratorVo;
 import pers.syq.fastadmin.generator.vo.TableInfoVo;
 
 import javax.sql.DataSource;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
 
 @Service
@@ -80,6 +82,7 @@ public class GeneratorService {
     }
 
     private void testInjectDataSource(){
+
         try {
             springService.getBean("customDataSource");
         } catch (Exception e) {
@@ -101,20 +104,37 @@ public class GeneratorService {
          return generatorMapper.selectColumnListByTableName(tableName);
     }
 
-    public byte[] generateCode(List<TableInfoVo> tableInfos){
+    public byte[] generateCode(GeneratorVo generatorVo){
+        List<TableInfoVo> tableInfos = generatorVo.getTableInfoVos();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
+        boolean hasVersion = false;
         Collection<AbstractTemplate> templates = springService.getBeans(AbstractTemplate.class);
+        List<AbstractTemplate> templateList = templates.stream().filter(template -> !template.isCommon()).collect(Collectors.toList());
         for (TableInfoVo tableInfo : tableInfos) {
             TableContext tableContext = createTableContext(tableInfo);
+            if (!hasVersion){
+                for (ColumnContext column : tableContext.getColumns()) {
+                    if (column.getVersion()){
+                        hasVersion = true;
+                        break;
+                    }
+                }
+            }
             Map<String, Object> objectMap = BeanUtil.beanToMap(tableContext);
-            for (AbstractTemplate template : templates) {
+            for (AbstractTemplate template : templateList) {
                 template.generateCode(objectMap,zip);
             }
+        }
+        if (generatorVo.getSingleton()){
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("hasVersion",hasVersion);
+            templates.stream().filter(AbstractTemplate::isCommon).forEach(template -> template.generateCode(map,zip));
         }
         IoUtil.close(zip);
         return outputStream.toByteArray();
     }
+
 
     private TableContext createTableContext(TableInfoVo tableInfo){
         TableContext tableContext = new TableContext();

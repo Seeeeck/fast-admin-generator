@@ -7,23 +7,24 @@ import java.util.Map;
 
 @Component
 public class ControllerTemplate extends AbstractTemplate {
+
     @Override
-    boolean toResources() {
+    protected boolean toResources() {
         return false;
     }
 
     @Override
-    String outputFilePath() {
+    protected String outputFilePath() {
         return "controller";
     }
 
     @Override
-    String templateFileName() {
+    protected String templateFileName() {
         return "Controller.java.vm";
     }
 
     @Override
-    Map<String, Object> addExtraObjectMap() {
+    protected Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

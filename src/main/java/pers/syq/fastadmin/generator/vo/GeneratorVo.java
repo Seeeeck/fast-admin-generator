@@ -3,19 +3,15 @@ package pers.syq.fastadmin.generator.vo;
 import lombok.Data;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-public class TableInfoVo {
-    @NotBlank
-    private String tableName;
+public class GeneratorVo {
 
     @NotNull
-    private Integer idTypeCode;
-
+    private Boolean singleton;
 
     @Valid
-    private List<ColumnInfoVo> columnInfoVos;
+    private List<TableInfoVo> tableInfoVos;
 }

@@ -7,23 +7,24 @@ import java.util.Map;
 
 @Component
 public class MapperXmlTemplate extends AbstractTemplate{
+
     @Override
-    boolean toResources() {
+    protected boolean toResources() {
         return true;
     }
 
     @Override
-    String outputFilePath() {
+    protected String outputFilePath() {
         return "mapper";
     }
 
     @Override
-    String templateFileName() {
+    protected String templateFileName() {
         return "Mapper.xml.vm";
     }
 
     @Override
-    Map<String, Object> addExtraObjectMap() {
+    protected Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

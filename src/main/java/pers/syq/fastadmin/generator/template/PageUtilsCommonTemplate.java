@@ -4,11 +4,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.Map;
-
 @Component
-public class EntityTemplate extends AbstractTemplate{
-
-
+public class PageUtilsCommonTemplate extends AbstractCommonTemplate{
     @Override
     protected boolean toResources() {
         return false;
@@ -16,12 +13,12 @@ public class EntityTemplate extends AbstractTemplate{
 
     @Override
     protected String outputFilePath() {
-        return "entity";
+        return "utils";
     }
 
     @Override
     protected String templateFileName() {
-        return "Entity.java.vm";
+        return "PageUtils.java.vm";
     }
 
     @Override

@@ -7,23 +7,24 @@ import java.util.Map;
 
 @Component
 public class ServiceTemplate extends AbstractTemplate{
+
     @Override
-    boolean toResources() {
+    protected boolean toResources() {
         return false;
     }
 
     @Override
-    String outputFilePath() {
+    protected String outputFilePath() {
         return "service";
     }
 
     @Override
-    String templateFileName() {
+    protected String templateFileName() {
         return "Service.java.vm";
     }
 
     @Override
-    Map<String, Object> addExtraObjectMap() {
+    protected Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

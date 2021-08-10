@@ -14,6 +14,7 @@ import pers.syq.fastadmin.generator.module.DataSourceEntity;
 import pers.syq.fastadmin.generator.entity.TableEntity;
 import pers.syq.fastadmin.generator.module.GeneratorData;
 import pers.syq.fastadmin.generator.service.GeneratorService;
+import pers.syq.fastadmin.generator.vo.GeneratorVo;
 import pers.syq.fastadmin.generator.vo.TableInfoVo;
 
 import javax.servlet.http.HttpServletResponse;
@@ -74,14 +75,14 @@ public class GeneratorController {
 
 
     @PostMapping("/generate")
-    public void generateCode(@RequestBody @Validated List<TableInfoVo> tableInfos, HttpServletResponse response) throws IOException {
+    public void generateCode(@RequestBody @Validated GeneratorVo generatorVo, HttpServletResponse response) throws IOException {
         if (GeneratorData.dataSource == null){
             throw new FastAdminException(ErrorCode.NULL_DATABASE);
         }
         if (GeneratorData.globalConfig == null){
             throw new FastAdminException(ErrorCode.NULL_GLOBAL_CONFIG);
         }
-        byte[] data = generatorService.generateCode(tableInfos);
+        byte[] data = generatorService.generateCode(generatorVo);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"fastadmin.zip\"");
         response.setHeader("Access-Control-Allow-Origin","*");

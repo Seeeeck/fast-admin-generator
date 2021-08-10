@@ -3,13 +3,16 @@ package ${pkg}.${moduleName}.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+#if(${hasVersion})
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+#end
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @MapperScan("${pkg}.${moduleName}.mapper")
-public class MybatisConfig {
+public class MybatisPlusConfig {
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
@@ -18,6 +21,9 @@ public class MybatisConfig {
         paginationInnerInterceptor.setOverflow(true);
         paginationInnerInterceptor.setDbType(DbType.MYSQL);
         interceptor.addInnerInterceptor(paginationInnerInterceptor);
+#if(${hasVersion})
+        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+#end
         return interceptor;
     }
 
