@@ -28,7 +28,7 @@ To generate the code for CRUD.
 
 <img src="https://github.com/Seeeeck/fast-admin-generator/blob/master/imgs/step3-2.png" alt="step3" width="800" />
 
-##　Customize
+## Customize
 
 If you want to generate your own code,you can write  a class to extends <a href="https://github.com/Seeeeck/fast-admin-generator/blob/master/src/main/java/pers/syq/fastadmin/generator/template/AbstractTemplate.java">AbstractTemplate</a> or <a href="https://github.com/Seeeeck/fast-admin-generator/blob/master/src/main/java/pers/syq/fastadmin/generator/template/AbstractCommonTemplate.java">AbstractCommonTemplate</a> ,and write a template that matches it.
 
