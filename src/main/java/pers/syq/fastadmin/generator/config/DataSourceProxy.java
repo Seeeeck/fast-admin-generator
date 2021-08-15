@@ -20,11 +20,11 @@ public class DataSourceProxy implements DataSource {
     private HikariDataSource hikariDataSource;
     private SpringService springService;
 
-    public DataSourceProxy(SpringService springService){
+    public DataSourceProxy(SpringService springService) {
         this.springService = springService;
     }
 
-    public void setDataSource(){
+    public void setDataSource() {
         this.hikariDataSource = (HikariDataSource) springService.getBean("customDataSource");
     }
 
@@ -35,7 +35,7 @@ public class DataSourceProxy implements DataSource {
 
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
-        return hikariDataSource.getConnection(username,password);
+        return hikariDataSource.getConnection(username, password);
     }
 
     @Override

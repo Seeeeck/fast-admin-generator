@@ -6,24 +6,24 @@ import java.util.Collections;
 import java.util.Map;
 
 @Component
-public class RCommonTemplate extends AbstractCommonTemplate{
+public class RCommonTemplate extends AbstractCommonTemplate {
     @Override
-    protected boolean toResources() {
+    public boolean toResources() {
         return false;
     }
 
     @Override
-    protected String outputFilePath() {
+    public String outputFilePath() {
         return "utils";
     }
 
     @Override
-    protected String templateFileName() {
+    public String templateFileName() {
         return "R.java.vm";
     }
 
     @Override
-    protected Map<String, Object> addExtraObjectMap() {
+    public Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

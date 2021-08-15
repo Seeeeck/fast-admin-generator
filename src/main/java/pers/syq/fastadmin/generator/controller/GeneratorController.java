@@ -31,8 +31,8 @@ public class GeneratorController {
 
 
     @GetMapping("/tables")
-    public R<?> listTables(){
-        if (GeneratorData.dataSource == null){
+    public R<?> listTables() {
+        if (GeneratorData.dataSource == null) {
             return R.error().errorCode(ErrorCode.NULL_DATABASE);
         }
         List<TableEntity> tables = generatorService.listTables();
@@ -40,8 +40,8 @@ public class GeneratorController {
     }
 
     @GetMapping("/tables/columns")
-    public R<?> listColumnsByTableName(@RequestParam("tableName") @NotBlank String tableName){
-        if (GeneratorData.dataSource == null){
+    public R<?> listColumnsByTableName(@RequestParam("tableName") @NotBlank String tableName) {
+        if (GeneratorData.dataSource == null) {
             return R.error().errorCode(ErrorCode.NULL_DATABASE);
         }
         List<ColumnEntity> columnEntities = generatorService.listColumnsByTableName(tableName);
@@ -50,25 +50,25 @@ public class GeneratorController {
 
 
     @PostMapping("/datasource")
-    public R<?> injectDataSource(@RequestBody @Validated DataSourceEntity dataSourceEntity){
+    public R<?> injectDataSource(@RequestBody @Validated DataSourceEntity dataSourceEntity) {
         boolean success = generatorService.injectDataSource(dataSourceEntity);
         return success ? R.ok() : R.error();
     }
 
     @GetMapping("/datasource")
-    public R<?> getDataSourceData(){
+    public R<?> getDataSourceData() {
         return GeneratorData.dataSource == null ?
                 R.error().code(HttpStatus.HTTP_NOT_FOUND).msg("not found") : R.ok(GeneratorData.dataSource);
     }
 
     @PostMapping("/config")
-    public R<?> saveGlobalConfig(@RequestBody @Validated GlobalConfigEntity globalConfig){
+    public R<?> saveGlobalConfig(@RequestBody @Validated GlobalConfigEntity globalConfig) {
         GeneratorData.globalConfig = globalConfig;
         return R.ok();
     }
 
     @GetMapping("/config")
-    public R<?> getGlobalConfigData(){
+    public R<?> getGlobalConfigData() {
         return GeneratorData.globalConfig == null ?
                 R.error().code(HttpStatus.HTTP_NOT_FOUND).msg("not found") : R.ok(GeneratorData.globalConfig);
     }
@@ -76,19 +76,19 @@ public class GeneratorController {
 
     @PostMapping("/generate")
     public void generateCode(@RequestBody @Validated GeneratorVo generatorVo, HttpServletResponse response) throws IOException {
-        if (GeneratorData.dataSource == null){
+        if (GeneratorData.dataSource == null) {
             throw new FastAdminException(ErrorCode.NULL_DATABASE);
         }
-        if (GeneratorData.globalConfig == null){
+        if (GeneratorData.globalConfig == null) {
             throw new FastAdminException(ErrorCode.NULL_GLOBAL_CONFIG);
         }
         byte[] data = generatorService.generateCode(generatorVo);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"fastadmin.zip\"");
-        response.setHeader("Access-Control-Allow-Origin","*");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
-        IoUtil.write(response.getOutputStream(),false,data);
+        IoUtil.write(response.getOutputStream(), false, data);
     }
 
 

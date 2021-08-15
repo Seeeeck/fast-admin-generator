@@ -9,7 +9,7 @@ import pers.syq.fastadmin.generator.entity.TableEntity;
 import java.util.List;
 
 @Mapper
-public interface MySQLGeneratorMapper  extends BaseMapper<TableEntity> {
+public interface MySQLGeneratorMapper extends BaseMapper<TableEntity> {
 
     List<TableEntity> selectTableList();
 

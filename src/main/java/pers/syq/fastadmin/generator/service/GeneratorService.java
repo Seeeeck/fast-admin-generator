@@ -28,7 +28,8 @@ import pers.syq.fastadmin.generator.module.DataSourceEntity;
 import pers.syq.fastadmin.generator.entity.TableEntity;
 
 import pers.syq.fastadmin.generator.module.GeneratorData;
-import pers.syq.fastadmin.generator.template.AbstractTemplate;
+import pers.syq.fastadmin.generator.template.AbstractCommonTemplate;
+import pers.syq.fastadmin.generator.template.AbstractMultipleTemplate;
 import pers.syq.fastadmin.generator.vo.ColumnInfoVo;
 import pers.syq.fastadmin.generator.vo.GeneratorVo;
 import pers.syq.fastadmin.generator.vo.TableInfoVo;
@@ -36,7 +37,6 @@ import pers.syq.fastadmin.generator.vo.TableInfoVo;
 import javax.sql.DataSource;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
 
 @Service
@@ -55,7 +55,7 @@ public class GeneratorService {
         injectCustomDataSource(dataSourceEntity);
         testInjectDataSource();
         DataSource dataSource = (DataSource) springService.getBean("dataSource");
-        if (dataSource instanceof DataSourceProxy){
+        if (dataSource instanceof DataSourceProxy) {
             ((DataSourceProxy) dataSource).setDataSource();
             GeneratorData.dataSource = dataSourceEntity;
             return true;
@@ -64,15 +64,15 @@ public class GeneratorService {
 
     }
 
-    private void injectCustomDataSource(DataSourceEntity dataSourceEntity){
+    private void injectCustomDataSource(DataSourceEntity dataSourceEntity) {
         HikariConfig hikariConfig = new HikariConfig();
-        initDatasourceConfig(hikariConfig,dataSourceEntity);
+        initDatasourceConfig(hikariConfig, dataSourceEntity);
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.rootBeanDefinition(HikariDataSource.class)
                 .addConstructorArgValue(hikariConfig).getBeanDefinition();
         springService.injectBean("customDataSource", beanDefinition);
     }
 
-    private void initDatasourceConfig(HikariConfig hikariConfig,DataSourceEntity dataSourceEntity) {
+    private void initDatasourceConfig(HikariConfig hikariConfig, DataSourceEntity dataSourceEntity) {
         String url = "jdbc:mysql://" + dataSourceEntity.getHost() +
                 ":" + dataSourceEntity.getPort() +
                 "/" + dataSourceEntity.getDatabase();
@@ -81,16 +81,16 @@ public class GeneratorService {
         hikariConfig.setPassword(dataSourceEntity.getPassword());
     }
 
-    private void testInjectDataSource(){
+    private void testInjectDataSource() {
 
         try {
             springService.getBean("customDataSource");
         } catch (Exception e) {
-            if(e instanceof BeanCreationException && "customDataSource".equals(((BeanCreationException) e).getBeanName())){
-                if (GeneratorData.dataSource != null){
+            if (e instanceof BeanCreationException && "customDataSource".equals(((BeanCreationException) e).getBeanName())) {
+                if (GeneratorData.dataSource != null) {
                     injectCustomDataSource(GeneratorData.dataSource);
                     DataSource dataSource = (DataSource) springService.getBean("dataSource");
-                    if (dataSource instanceof DataSourceProxy){
+                    if (dataSource instanceof DataSourceProxy) {
                         ((DataSourceProxy) dataSource).setDataSource();
                     }
                 }
@@ -101,58 +101,53 @@ public class GeneratorService {
     }
 
     public List<ColumnEntity> listColumnsByTableName(String tableName) {
-         return generatorMapper.selectColumnListByTableName(tableName);
+        return generatorMapper.selectColumnListByTableName(tableName);
     }
 
-    public byte[] generateCode(GeneratorVo generatorVo){
+    public byte[] generateCode(GeneratorVo generatorVo) {
         List<TableInfoVo> tableInfos = generatorVo.getTableInfoVos();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
-        boolean hasVersion = false;
-        Collection<AbstractTemplate> templates = springService.getBeans(AbstractTemplate.class);
-        List<AbstractTemplate> templateList = templates.stream().filter(template -> !template.isCommon()).collect(Collectors.toList());
+        Collection<AbstractMultipleTemplate> templates = springService.getBeans(AbstractMultipleTemplate.class);
         for (TableInfoVo tableInfo : tableInfos) {
             TableContext tableContext = createTableContext(tableInfo);
-            if (!hasVersion){
-                for (ColumnContext column : tableContext.getColumns()) {
-                    if (column.getVersion()){
-                        hasVersion = true;
-                        break;
-                    }
-                }
-            }
             Map<String, Object> objectMap = BeanUtil.beanToMap(tableContext);
-            for (AbstractTemplate template : templateList) {
-                template.generateCode(objectMap,zip);
+            for (AbstractMultipleTemplate template : templates) {
+                template.generateCode(objectMap, zip);
             }
         }
-        if (generatorVo.getSingleton()){
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("hasVersion",hasVersion);
-            templates.stream().filter(AbstractTemplate::isCommon).forEach(template -> template.generateCode(map,zip));
+        if (generatorVo.getSingleton()) {
+            generateCommonFiles(zip);
         }
         IoUtil.close(zip);
         return outputStream.toByteArray();
     }
 
+    private void generateCommonFiles(ZipOutputStream zip) {
+        Collection<AbstractCommonTemplate> commonTemplates = springService.getBeans(AbstractCommonTemplate.class);
+        for (AbstractCommonTemplate commonTemplate : commonTemplates) {
+            commonTemplate.generateCode(Collections.emptyMap(), zip);
+        }
+    }
 
-    private TableContext createTableContext(TableInfoVo tableInfo){
+
+    private TableContext createTableContext(TableInfoVo tableInfo) {
         TableContext tableContext = new TableContext();
         TableEntity tableEntity = generatorMapper.selectTableByTableName(tableInfo.getTableName());
         List<ColumnEntity> columnEntities = generatorMapper.selectColumnListByTableName(tableInfo.getTableName());
         List<ColumnInfoVo> columnInfoVos = tableInfo.getColumnInfoVos();
-        setTableContextProperties(tableContext,tableEntity);
+        setTableContextProperties(tableContext, tableEntity);
         tableContext.setIdType(IdType.getIdType(tableInfo.getIdTypeCode()));
         List<ColumnContext> columnContexts = new ArrayList<>();
         Props convertProps = PropsUtil.get("generator.properties");
         for (ColumnEntity columnEntity : columnEntities) {
             ColumnContext columnContext = new ColumnContext();
             String attrType = convertProps.getStr(columnEntity.getDataType(), "String");
-            setColumnContextProperties(columnContext,columnEntity, columnInfoVos,attrType);
-            if (!tableContext.isHasBigDecimal() && attrType.equals("BigDecimal")){
+            setColumnContextProperties(columnContext, columnEntity, columnInfoVos, attrType);
+            if (!tableContext.isHasBigDecimal() && attrType.equals("BigDecimal")) {
                 tableContext.setHasBigDecimal(true);
             }
-            if (!tableContext.isHasDate() && attrType.equals("Date")){
+            if (!tableContext.isHasDate() && attrType.equals("Date")) {
                 tableContext.setHasDate(true);
             }
             if (tableContext.getPk() == null && "PRI".equalsIgnoreCase(columnEntity.getColumnKey())) {
@@ -161,18 +156,18 @@ public class GeneratorService {
             columnContexts.add(columnContext);
         }
         tableContext.setColumns(columnContexts);
-        if (tableContext.getPk() == null && CollectionUtil.isNotEmpty(tableContext.getColumns())){
+        if (tableContext.getPk() == null && CollectionUtil.isNotEmpty(tableContext.getColumns())) {
             tableContext.setPk(tableContext.getColumns().get(0));
         }
         return tableContext;
     }
 
 
-    private void setTableContextProperties(TableContext tableContext, TableEntity tableEntity){
-        BeanUtil.copyProperties(tableEntity,tableContext);
+    private void setTableContextProperties(TableContext tableContext, TableEntity tableEntity) {
+        BeanUtil.copyProperties(tableEntity, tableContext);
         String tableName = tableEntity.getTableName();
-        if (StrUtil.isNotBlank(GeneratorData.globalConfig.getTablePrefix())){
-            tableName = tableName.replaceFirst(GeneratorData.globalConfig.getTablePrefix(),"");
+        if (StrUtil.isNotBlank(GeneratorData.globalConfig.getTablePrefix())) {
+            tableName = tableName.replaceFirst(GeneratorData.globalConfig.getTablePrefix(), "");
         }
         String classname = StrUtil.toCamelCase(tableName);
         tableContext.setClassname(classname);
@@ -180,14 +175,14 @@ public class GeneratorService {
         tableContext.setPathName(classname.toLowerCase());
     }
 
-    private  void setColumnContextProperties(ColumnContext columnContext, ColumnEntity columnEntity, List<ColumnInfoVo> columnInfoVos, String attrType){
-        BeanUtil.copyProperties(columnEntity,columnContext);
+    private void setColumnContextProperties(ColumnContext columnContext, ColumnEntity columnEntity, List<ColumnInfoVo> columnInfoVos, String attrType) {
+        BeanUtil.copyProperties(columnEntity, columnContext);
         String attrname = StrUtil.toCamelCase(columnEntity.getColumnName());
         columnContext.setAttrname(attrname);
         columnContext.setAttrName(StrUtil.upperFirst(attrname));
         columnContext.setAttrType(attrType);
         for (ColumnInfoVo columnInfoVo : columnInfoVos) {
-            if (columnEntity.getColumnName().equals(columnInfoVo.getColumnName())){
+            if (columnEntity.getColumnName().equals(columnInfoVo.getColumnName())) {
                 columnContext.setFill(FieldFill.getFieldFill(columnInfoVo.getFillCode()));
                 columnContext.setVersion(columnInfoVo.getVersion());
                 columnContext.setLogic(columnInfoVo.getLogic());

@@ -10,16 +10,17 @@ public class R<T> {
     private String msg;
     private T data;
 
-    private R(){}
+    private R() {
+    }
 
-    public static R<?> ok(){
+    public static R<?> ok() {
         R<?> r = new R<>();
         r.setCode(0);
         r.setMsg("success");
         return r;
     }
 
-    public static <T> R<T> ok(T data){
+    public static <T> R<T> ok(T data) {
         R<T> r = new R<>();
         r.setData(data);
         r.setCode(0);
@@ -28,14 +29,14 @@ public class R<T> {
     }
 
 
-    public static R<?> error(){
+    public static R<?> error() {
         R<?> r = new R<>();
         r.setCode(HttpStatus.HTTP_INTERNAL_ERROR);
         r.setMsg("unknown error");
         return r;
     }
 
-    public static <T> R<T> error(T data){
+    public static <T> R<T> error(T data) {
         R<T> r = new R<>();
         r.setData(data);
         r.setCode(HttpStatus.HTTP_INTERNAL_ERROR);
@@ -43,17 +44,18 @@ public class R<T> {
         return r;
     }
 
-    public R<?> errorCode(ErrorCode errorCode){
+    public R<?> errorCode(ErrorCode errorCode) {
         this.code = errorCode.getCode();
         this.msg = errorCode.getMsg();
         return this;
     }
-    public R<?> code(int code){
+
+    public R<?> code(int code) {
         this.code = code;
         return this;
     }
 
-    public R<?> msg(String msg){
+    public R<?> msg(String msg) {
         this.msg = msg;
         return this;
     }

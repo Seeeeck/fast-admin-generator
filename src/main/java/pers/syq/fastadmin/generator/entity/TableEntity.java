@@ -8,10 +8,10 @@ import java.util.Date;
 
 @Data
 public class TableEntity {
-	//表的名称
-	private String tableName;
-	//表的备注
-	private String comment;
-	@JsonFormat(pattern="yyyy-MM-dd")
-	private Date createTime;
+    //表的名称
+    private String tableName;
+    //表的备注
+    private String comment;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date createTime;
 }

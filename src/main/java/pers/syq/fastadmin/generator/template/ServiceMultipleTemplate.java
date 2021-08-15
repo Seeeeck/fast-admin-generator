@@ -6,26 +6,25 @@ import java.util.Collections;
 import java.util.Map;
 
 @Component
-public class EntityTemplate extends AbstractTemplate{
-
+public class ServiceMultipleTemplate extends AbstractMultipleTemplate {
 
     @Override
-    protected boolean toResources() {
+    public boolean toResources() {
         return false;
     }
 
     @Override
-    protected String outputFilePath() {
-        return "entity";
+    public String outputFilePath() {
+        return "service";
     }
 
     @Override
-    protected String templateFileName() {
-        return "Entity.java.vm";
+    public String templateFileName() {
+        return "Service.java.vm";
     }
 
     @Override
-    protected Map<String, Object> addExtraObjectMap() {
+    public Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

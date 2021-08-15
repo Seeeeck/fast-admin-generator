@@ -15,10 +15,9 @@ import javax.sql.DataSource;
 public class BeanDefinition {
 
     @Bean
-    public DataSource dataSource(SpringService springService){
+    public DataSource dataSource(SpringService springService) {
         return new DataSourceProxy(springService);
     }
-
 
 
 }

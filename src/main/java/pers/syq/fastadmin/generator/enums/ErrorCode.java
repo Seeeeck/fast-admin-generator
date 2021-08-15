@@ -1,12 +1,12 @@
 package pers.syq.fastadmin.generator.enums;
 
 public enum ErrorCode {
-    SQL_EXCEPTION(1000,"Bad datasource"),
-    NULL_DATABASE(1001,"Null datasource"),
-    NULL_GLOBAL_CONFIG(1100,"Null global configuration");
+    SQL_EXCEPTION(1000, "Bad datasource"),
+    NULL_DATABASE(1001, "Null datasource"),
+    NULL_GLOBAL_CONFIG(1100, "Null global configuration");
 
-    private Integer code;
-    private String msg;
+    private final Integer code;
+    private final String msg;
 
     ErrorCode(int code, String msg) {
         this.code = code;

@@ -6,25 +6,25 @@ import java.util.Collections;
 import java.util.Map;
 
 @Component
-public class MapperTemplate extends AbstractTemplate{
+public class ControllerMultipleTemplate extends AbstractMultipleTemplate {
 
     @Override
-    protected boolean toResources() {
+    public boolean toResources() {
         return false;
     }
 
     @Override
-    protected String outputFilePath() {
-        return "mapper";
+    public String outputFilePath() {
+        return "controller";
     }
 
     @Override
-    protected String templateFileName() {
-        return "Mapper.java.vm";
+    public String templateFileName() {
+        return "Controller.java.vm";
     }
 
     @Override
-    protected Map<String, Object> addExtraObjectMap() {
+    public Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

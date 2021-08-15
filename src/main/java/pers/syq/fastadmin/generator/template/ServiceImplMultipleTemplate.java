@@ -7,24 +7,24 @@ import java.util.Collections;
 import java.util.Map;
 
 @Component
-public class ServiceImplTemplate extends AbstractTemplate{
+public class ServiceImplMultipleTemplate extends AbstractMultipleTemplate {
     @Override
-    protected boolean toResources() {
+    public boolean toResources() {
         return false;
     }
 
     @Override
-    protected String outputFilePath() {
+    public String outputFilePath() {
         return "service" + File.separator + "impl";
     }
 
     @Override
-    protected String templateFileName() {
+    public String templateFileName() {
         return "serviceImpl.java.vm";
     }
 
     @Override
-    protected Map<String, Object> addExtraObjectMap() {
+    public Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }

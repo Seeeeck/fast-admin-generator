@@ -1,28 +1,32 @@
 package pers.syq.fastadmin.generator.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum FieldFill {
-    NONE(0,null),
-    DEFAULT(1,"FieldFill.DEFAULT"),
-    INSERT(2,"FieldFill.INSERT"),
-    UPDATE(3,"FieldFill.UPDATE"),
-    INSERT_UPDATE(4,"FieldFill.INSERT_UPDATE");
+    NONE(0, null),
+    DEFAULT(1, "FieldFill.DEFAULT"),
+    INSERT(2, "FieldFill.INSERT"),
+    UPDATE(3, "FieldFill.UPDATE"),
+    INSERT_UPDATE(4, "FieldFill.INSERT_UPDATE");
 
+    private final Integer code;
+    private final String msg;
+    private static final Map<Integer, FieldFill> codeLookup = new HashMap<>();
 
-    private Integer code;
-    private String msg;
+    static {
+        for (FieldFill fieldFill : FieldFill.values()) {
+            codeLookup.put(fieldFill.getCode(), fieldFill);
+        }
+    }
 
-    FieldFill(int code,String msg) {
+    FieldFill(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public static FieldFill getFieldFill(int code){
-        for (FieldFill fieldFill : FieldFill.values()) {
-            if (fieldFill.getCode() == code){
-                return fieldFill;
-            }
-        }
-        return NONE;
+    public static FieldFill getFieldFill(int code) {
+        return codeLookup.get(code);
     }
 
     public Integer getCode() {
@@ -34,7 +38,7 @@ public enum FieldFill {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.getMsg();
     }
 }

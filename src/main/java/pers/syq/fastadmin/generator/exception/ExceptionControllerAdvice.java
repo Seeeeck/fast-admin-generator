@@ -27,9 +27,9 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public R<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            map.put(fieldError.getField(),fieldError.getDefaultMessage());
+            map.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         return R.error(map).code(HttpStatus.HTTP_BAD_REQUEST).msg("bad request");
     }
@@ -37,10 +37,10 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler({ConstraintViolationException.class})
     public R<?> handleConstraintViolationException(ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
-        HashMap<String,Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         for (ConstraintViolation<?> violation : constraintViolations) {
             String[] strings = violation.getPropertyPath().toString().split("\\.");
-            map.put(strings[1],violation.getMessage());
+            map.put(strings[1], violation.getMessage());
         }
         return R.error(map).code(HttpStatus.HTTP_BAD_REQUEST).msg("bad request");
     }
@@ -48,9 +48,9 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler({BindException.class})
     public R<?> handleBindExceptionException(BindException ex) {
         BindingResult bindingResult = ex.getBindingResult();
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            map.put(fieldError.getField(),fieldError.getDefaultMessage());
+            map.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         return R.error(map).code(HttpStatus.HTTP_BAD_REQUEST).msg("bad request");
     }
@@ -59,7 +59,7 @@ public class ExceptionControllerAdvice {
     public R<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         log.error(String.valueOf(ex.getCause()));
         HashMap<String, Object> map = new HashMap<>();
-        map.put(ex.getName(),"null");
+        map.put(ex.getName(), "null");
         return R.error(map).code(HttpStatus.HTTP_BAD_REQUEST).msg("bad request");
     }
 
@@ -70,7 +70,7 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler({FastAdminException.class})
-    public R<?> handleFastAdminException(FastAdminException e){
+    public R<?> handleFastAdminException(FastAdminException e) {
         return R.error().code(e.getCode()).msg(e.getMsg());
     }
 

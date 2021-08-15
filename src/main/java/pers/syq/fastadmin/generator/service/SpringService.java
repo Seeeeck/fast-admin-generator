@@ -23,12 +23,12 @@ public class SpringService implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    public void injectBean(String beanName, BeanDefinition beanDefinition){
-        if(applicationContext != null){
+    public void injectBean(String beanName, BeanDefinition beanDefinition) {
+        if (applicationContext != null) {
             DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
             try {
                 beanFactory.removeBeanDefinition(beanName);
-            }catch (NoSuchBeanDefinitionException e){
+            } catch (NoSuchBeanDefinitionException e) {
             }
             beanFactory.registerBeanDefinition(beanName, beanDefinition);
         }
@@ -36,10 +36,11 @@ public class SpringService implements ApplicationContextAware {
 
     /**
      * 注入单个Bean使用，若需要重复注入同一个Bean，使用上面的方法
+     *
      * @param object
      */
-    public void injectBean(Object object){
-        if(applicationContext != null){
+    public void injectBean(Object object) {
+        if (applicationContext != null) {
             DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
             char[] nameArray = object.getClass().getSimpleName().toCharArray();
             nameArray[0] += 32;
@@ -47,22 +48,22 @@ public class SpringService implements ApplicationContextAware {
         }
     }
 
-    public Object getBean(String beanName){
-        if(applicationContext != null){
+    public Object getBean(String beanName) {
+        if (applicationContext != null) {
             return applicationContext.getBean(beanName);
         }
         return null;
     }
 
-    public <T> T getBean(Class<T> clazz){
-        if(applicationContext != null){
+    public <T> T getBean(Class<T> clazz) {
+        if (applicationContext != null) {
             return applicationContext.getBean(clazz);
         }
         return null;
     }
 
-    public <T> Collection<T> getBeans(Class<T> clazz){
-        if (applicationContext != null){
+    public <T> Collection<T> getBeans(Class<T> clazz) {
+        if (applicationContext != null) {
             return applicationContext.getBeansOfType(clazz).values();
         }
         return Collections.emptyList();

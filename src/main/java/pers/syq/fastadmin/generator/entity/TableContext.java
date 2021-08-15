@@ -25,7 +25,6 @@ public class TableContext {
     private boolean hasDate;
 
 
-
     private IdType idType;
 
     public IdType getIdType() {

@@ -6,20 +6,21 @@ import java.util.Collections;
 import java.util.Map;
 
 @Component
-public class ErrorCodeCommonTemplate extends AbstractCommonTemplate {
+public class MapperXmlMultipleTemplate extends AbstractMultipleTemplate {
+
     @Override
     public boolean toResources() {
-        return false;
+        return true;
     }
 
     @Override
     public String outputFilePath() {
-        return "utils";
+        return "mapper";
     }
 
     @Override
     public String templateFileName() {
-        return "ErrorCode.java.vm";
+        return "Mapper.xml.vm";
     }
 
     @Override

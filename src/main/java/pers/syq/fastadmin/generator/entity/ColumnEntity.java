@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ColumnEntity {
-	//列名
+    //列名
     private String columnName;
     //列名类型
     private String dataType;

@@ -4,25 +4,26 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.Map;
+
 @Component
-public class PageUtilsCommonTemplate extends AbstractCommonTemplate{
+public class PageUtilsCommonTemplate extends AbstractCommonTemplate {
     @Override
-    protected boolean toResources() {
+    public boolean toResources() {
         return false;
     }
 
     @Override
-    protected String outputFilePath() {
+    public String outputFilePath() {
         return "utils";
     }
 
     @Override
-    protected String templateFileName() {
+    public String templateFileName() {
         return "PageUtils.java.vm";
     }
 
     @Override
-    protected Map<String, Object> addExtraObjectMap() {
+    public Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
 }
