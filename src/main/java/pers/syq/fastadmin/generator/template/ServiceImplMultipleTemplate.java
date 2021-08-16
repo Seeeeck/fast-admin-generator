@@ -20,7 +20,7 @@ public class ServiceImplMultipleTemplate extends AbstractMultipleTemplate {
 
     @Override
     public String templateFileName() {
-        return "serviceImpl.java.vm";
+        return "ServiceImpl.java.vm";
     }
 
     @Override

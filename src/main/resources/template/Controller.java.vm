@@ -22,6 +22,7 @@ import ${pkg}.${moduleName}.entity.${className}Entity;
 import ${pkg}.${moduleName}.service.${className}Service;
 import ${pkg}.common.utils.PageUtils;
 import ${pkg}.common.utils.R;
+import java.util.Map;
 
 
 

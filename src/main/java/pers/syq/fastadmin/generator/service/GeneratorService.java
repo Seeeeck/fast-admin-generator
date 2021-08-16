@@ -126,7 +126,7 @@ public class GeneratorService {
     private void generateCommonFiles(ZipOutputStream zip) {
         Collection<AbstractCommonTemplate> commonTemplates = springService.getBeans(AbstractCommonTemplate.class);
         for (AbstractCommonTemplate commonTemplate : commonTemplates) {
-            commonTemplate.generateCode(Collections.emptyMap(), zip);
+            commonTemplate.generateCode(new HashMap<>(), zip);
         }
     }
 
