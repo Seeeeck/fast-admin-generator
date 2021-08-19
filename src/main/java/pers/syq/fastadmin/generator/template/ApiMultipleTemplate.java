@@ -1,25 +1,22 @@
 package pers.syq.fastadmin.generator.template;
 
 import org.springframework.stereotype.Component;
+import pers.syq.fastadmin.generator.module.GeneratorData;
 
 import java.util.Collections;
 import java.util.Map;
 
 @Component
-public class ErrorCodeCommonTemplate extends AbstractCommonTemplate {
-    @Override
-    public boolean toResources() {
-        return false;
-    }
+public class ApiMultipleTemplate extends AbstractVueMultipleTemplate {
 
     @Override
     public String outputFilePath() {
-        return "exception";
+        return "api/"+ GeneratorData.globalConfig.getModuleName();
     }
 
     @Override
     public String templateFileName() {
-        return "ErrorCode.java.vm";
+        return ".js.vm";
     }
 
     @Override

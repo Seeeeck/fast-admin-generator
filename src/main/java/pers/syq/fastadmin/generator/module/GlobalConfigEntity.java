@@ -20,6 +20,9 @@ public class GlobalConfigEntity {
     private Boolean enableLombok;
     @NotBlank
     private String author;
+    @NotNull
+    private Boolean enableWebSecurity;
+
     @NotBlank
     @Email
     private String email;

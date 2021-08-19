@@ -1,0 +1,40 @@
+import request from '@/utils/request';
+
+
+export function list${className}s() {
+    return request({
+        url: '/${moduleName}/${pathName}',
+        method: 'get'
+    })
+}
+
+export function get${className}(${pk.attrname}) {
+    return request({
+        url: '/${moduleName}/${pathName}/' + ${pk.attrname},
+        method: 'get'
+    })
+}
+
+export function save${className}(data) {
+    return request({
+        url: '/${moduleName}/${pathName}',
+        method: 'post',
+        data
+    })
+}
+
+export function update${className}(data) {
+    return request({
+        url: '/${moduleName}/${pathName}',
+        method: 'put',
+        data
+    })
+}
+
+export function delete${className}(${pk.attrname}s) {
+    return request({
+        url: '/${moduleName}/${pathName}/batch',
+        method: 'delete',
+        params: { ${pk.attrname}s }
+    })
+}

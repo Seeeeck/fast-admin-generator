@@ -93,11 +93,11 @@ public interface Template {
 
     default String addFileName(String path, String className) {
         String outputFilePath = formatOutputFilePath();
-        String javaFileName = getNoSuffixTemplateFileName();
+        String fileName = getNoSuffixTemplateFileName();
         if (StrUtil.isEmpty(outputFilePath)) {
-            return path + className + javaFileName;
+            return path + className + fileName;
         } else {
-            return path + outputFilePath + File.separator + className + javaFileName;
+            return path + outputFilePath + File.separator + className + fileName;
         }
     }
 

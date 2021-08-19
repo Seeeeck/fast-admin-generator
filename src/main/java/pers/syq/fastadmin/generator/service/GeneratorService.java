@@ -30,6 +30,7 @@ import pers.syq.fastadmin.generator.entity.TableEntity;
 import pers.syq.fastadmin.generator.module.GeneratorData;
 import pers.syq.fastadmin.generator.template.AbstractCommonTemplate;
 import pers.syq.fastadmin.generator.template.AbstractMultipleTemplate;
+import pers.syq.fastadmin.generator.template.AbstractVueMultipleTemplate;
 import pers.syq.fastadmin.generator.vo.ColumnInfoVo;
 import pers.syq.fastadmin.generator.vo.GeneratorVo;
 import pers.syq.fastadmin.generator.vo.TableInfoVo;
@@ -109,11 +110,15 @@ public class GeneratorService {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         Collection<AbstractMultipleTemplate> templates = springService.getBeans(AbstractMultipleTemplate.class);
+        Collection<AbstractVueMultipleTemplate> vueTemplates = springService.getBeans(AbstractVueMultipleTemplate.class);
         for (TableInfoVo tableInfo : tableInfos) {
             TableContext tableContext = createTableContext(tableInfo);
             Map<String, Object> objectMap = BeanUtil.beanToMap(tableContext);
             for (AbstractMultipleTemplate template : templates) {
                 template.generateCode(objectMap, zip);
+            }
+            for (AbstractVueMultipleTemplate vueTemplate : vueTemplates) {
+                vueTemplate.generateCode(objectMap,zip);
             }
         }
         if (generatorVo.getSingleton()) {
@@ -173,6 +178,7 @@ public class GeneratorService {
         tableContext.setClassname(classname);
         tableContext.setClassName(StrUtil.upperFirst(classname));
         tableContext.setPathName(classname.toLowerCase());
+        tableContext.setFrontPathName(tableName.replaceAll("_","-"));
     }
 
     private void setColumnContextProperties(ColumnContext columnContext, ColumnEntity columnEntity, List<ColumnInfoVo> columnInfoVos, String attrType) {

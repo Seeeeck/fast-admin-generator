@@ -1,5 +1,12 @@
 package ${pkg}.common.utils;
 
+#if(${enableLombok})
+import lombok.Getter;
+#end
+
+#if(${enableLombok})
+@Getter
+#end
 public enum ErrorCode {
     NOT_FOUND(404,"Not found");
 
@@ -11,6 +18,7 @@ public enum ErrorCode {
         this.msg = msg;
     }
 
+#if(!${enableLombok})
     public int getCode() {
         return code;
     }
@@ -18,5 +26,6 @@ public enum ErrorCode {
     public String getMsg() {
         return msg;
     }
+#end
 
 }

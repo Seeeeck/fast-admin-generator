@@ -19,11 +19,20 @@ public class TableContext {
     private String classname;
 
     private String pathName;
+    // sys_user => sys-user
+    private String frontPathName;
 
     private boolean hasBigDecimal;
 
     private boolean hasDate;
 
+    public String getFrontPathName() {
+        return frontPathName;
+    }
+
+    public void setFrontPathName(String frontPathName) {
+        this.frontPathName = frontPathName;
+    }
 
     private IdType idType;
 
