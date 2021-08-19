@@ -30,7 +30,7 @@ To generate the code for CRUD.
 
 ## Customize
 
-If you want to generate your own code,you can write  a class to extends <a href="https://github.com/Seeeeck/fast-admin-generator/blob/master/src/main/java/pers/syq/fastadmin/generator/template/AbstractTemplate.java">AbstractTemplate</a> or <a href="https://github.com/Seeeeck/fast-admin-generator/blob/master/src/main/java/pers/syq/fastadmin/generator/template/AbstractCommonTemplate.java">AbstractCommonTemplate</a> ,and write a template that matches it.
+If you want to generate your own code,you can write  a class to extends <a href="https://github.com/Seeeeck/fast-admin-generator/blob/master/src/main/java/pers/syq/fastadmin/generator/template/AbstractMultipleTemplate.java">AbstractMultipleTemplate</a> or <a href="https://github.com/Seeeeck/fast-admin-generator/blob/master/src/main/java/pers/syq/fastadmin/generator/template/AbstractCommonTemplate.java">AbstractCommonTemplate</a> or <a href="https://github.com/Seeeeck/fast-admin-generator/blob/master/src/main/java/pers/syq/fastadmin/generator/template/AbstractVueMultipleTemplate.java">AbstractVueMultipleTemplate</a>,and write a template that matches it.
 
 Like this:
 
