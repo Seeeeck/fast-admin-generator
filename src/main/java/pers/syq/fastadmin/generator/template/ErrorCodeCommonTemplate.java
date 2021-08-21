@@ -26,4 +26,9 @@ public class ErrorCodeCommonTemplate extends AbstractCommonTemplate {
     public Map<String, Object> addExtraObjectMap() {
         return Collections.emptyMap();
     }
+
+    @Override
+    public boolean isSecurityComponent() {
+        return false;
+    }
 }

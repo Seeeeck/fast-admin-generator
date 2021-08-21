@@ -45,10 +45,10 @@ public class ${className}Controller {
     @ApiOperation(value = "queryPage")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAuthority('${moduleName}:${pathName}:list')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:page','ROLE_ADMIN')")
 #end
-    @GetMapping
-    public R<PageUtils> list(@RequestParam Map<String, Object> params){
+    @GetMapping("/page")
+    public R<PageUtils> page(@RequestParam Map<String, Object> params){
         PageUtils page = ${classname}Service.queryPage(params);
         return R.ok(page);
     }
@@ -57,7 +57,7 @@ public class ${className}Controller {
     @ApiOperation(value = "getById")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAuthority('${moduleName}:${pathName}:get')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:get','ROLE_ADMIN')")
 #end
     @GetMapping("/{${pk.attrname}}")
     public R<${className}Entity> getById(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}){
@@ -69,7 +69,7 @@ public class ${className}Controller {
     @ApiOperation(value = "save")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAuthority('${moduleName}:${pathName}:save')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:save','ROLE_ADMIN')")
 #end
     @PostMapping
     public R<?> save(@RequestBody ${className}Entity ${classname}){
@@ -81,7 +81,7 @@ public class ${className}Controller {
     @ApiOperation(value = "update")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAuthority('${moduleName}:${pathName}:update')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:update','ROLE_ADMIN')")
 #end
     @PutMapping
     public R<?> update(@RequestBody ${className}Entity ${classname}){
@@ -93,7 +93,7 @@ public class ${className}Controller {
     @ApiOperation(value = "deleteBatch")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAuthority('${moduleName}:${pathName}:delete')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:delete','ROLE_ADMIN')")
 #end
     @DeleteMapping("/batch")
     public R<?> deleteBatch(@RequestParam("${pk.attrname}s") List<${pk.attrType}> ${pk.attrname}s){

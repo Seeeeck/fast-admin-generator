@@ -38,6 +38,7 @@ public class GeneratorController {
         List<TableEntity> tables = generatorService.listTables();
         return R.ok(tables);
     }
+    
 
     @GetMapping("/tables/columns")
     public R<?> listColumnsByTableName(@RequestParam("tableName") @NotBlank String tableName) {

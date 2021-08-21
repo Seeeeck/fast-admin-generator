@@ -38,6 +38,7 @@ import pers.syq.fastadmin.generator.vo.TableInfoVo;
 import javax.sql.DataSource;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
 
 @Service
@@ -130,6 +131,9 @@ public class GeneratorService {
 
     private void generateCommonFiles(ZipOutputStream zip) {
         Collection<AbstractCommonTemplate> commonTemplates = springService.getBeans(AbstractCommonTemplate.class);
+        if (!GeneratorData.globalConfig.getEnableWebSecurity()){
+            commonTemplates = commonTemplates.stream().filter(template -> !template.isSecurityComponent()).collect(Collectors.toList());
+        }
         for (AbstractCommonTemplate commonTemplate : commonTemplates) {
             commonTemplate.generateCode(new HashMap<>(), zip);
         }

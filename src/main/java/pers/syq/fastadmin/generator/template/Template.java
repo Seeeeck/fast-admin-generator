@@ -19,6 +19,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public interface Template {
+
+
     /**
      * Whether the file is in the resources directory
      *

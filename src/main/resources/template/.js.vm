@@ -1,10 +1,11 @@
 import request from '@/utils/request';
 
 
-export function list${className}s() {
+export function page${className}s(params) {
     return request({
-        url: '/${moduleName}/${pathName}',
-        method: 'get'
+        url: '/${moduleName}/${pathName}/page',
+        method: 'get',
+        params
     })
 }
 
@@ -31,7 +32,7 @@ export function update${className}(data) {
     })
 }
 
-export function delete${className}(${pk.attrname}s) {
+export function delete${className}s(${pk.attrname}s) {
     return request({
         url: '/${moduleName}/${pathName}/batch',
         method: 'delete',

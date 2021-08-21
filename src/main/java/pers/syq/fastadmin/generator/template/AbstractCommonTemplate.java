@@ -17,6 +17,10 @@ import java.util.zip.ZipOutputStream;
  * Generator template for common files
  */
 public abstract class AbstractCommonTemplate implements pers.syq.fastadmin.generator.template.Template {
+
+
+    public abstract boolean isSecurityComponent();
+
     @Override
     public void generateCode(Map<String, Object> objectMap, ZipOutputStream zip) {
         VelocityContext velocityContext = createVelocityContext(objectMap);
