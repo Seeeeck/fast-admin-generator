@@ -26,9 +26,17 @@ public class InitRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        initVelocity();
+        openBrowse();
+    }
+
+    private void initVelocity(){
         Properties prop = new Properties();
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
+    }
+
+    private void openBrowse(){
         String host = "localhost";
         try {
             host = InetAddress.getLocalHost().getHostAddress();
