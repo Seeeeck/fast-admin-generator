@@ -18,6 +18,9 @@ public class GlobalConfigEntity {
     private Boolean enableSwagger;
     @NotNull
     private Boolean enableLombok;
+    // 0 中文,1 日语,2 英语
+    @NotNull
+    private Integer language;
     @NotBlank
     private String author;
     @NotNull

@@ -7,11 +7,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
@@ -37,16 +33,10 @@ public class InitRunner implements ApplicationRunner {
     }
 
     private void openBrowse(){
-        String host = "localhost";
-        try {
-            host = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            //ignored
-        }
-        String url = "http://" + host + ":"+port;
+        String url = "http://localhost:"+port;
         try {
             if (os.contains("Mac")){
-                RuntimeUtil.exec("open " + url);
+                //RuntimeUtil.exec("open " + url);
             }else if (os.contains("Windows")){
                 RuntimeUtil.exec("cmd /c start " + url);
             }

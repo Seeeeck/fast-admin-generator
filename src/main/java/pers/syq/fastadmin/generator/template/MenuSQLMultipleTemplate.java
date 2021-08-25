@@ -1,23 +1,25 @@
 package pers.syq.fastadmin.generator.template;
 
 import org.springframework.stereotype.Component;
-import pers.syq.fastadmin.generator.module.GeneratorData;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 
 @Component
-public class ApiMultipleTemplate extends AbstractVueMultipleTemplate {
+public class MenuSQLMultipleTemplate extends AbstractMultipleTemplate{
+    @Override
+    public boolean toResources() {
+        return true;
+    }
 
     @Override
     public String outputFilePath() {
-        return "api"+ File.separator + GeneratorData.globalConfig.getModuleName();
+        return "sql";
     }
 
     @Override
     public String templateFileName() {
-        return ".js.vm";
+        return "Menu.sql.vm";
     }
 
     @Override

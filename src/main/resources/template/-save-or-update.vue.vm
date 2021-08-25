@@ -1,0 +1,107 @@
+<template>
+  <el-dialog
+    :title="!dataForm.${pk.attrname} ? #if(${language} == 0)'新增'#elseif(${language} == 1)'追加'#elseif(${language} == 2)'Add'#end : #if(${language} == 0)'修改'#elseif(${language} == 1)'変更'#elseif(${language} == 2)'Update'#end"
+    :close-on-click-modal="false"
+    :visible.sync="visible">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName)
+    <el-form-item label="#if(!${column.comment} || $column.comment.equals(""))${column.attrname}#else${column.comment}#end" prop="${column.attrname}">
+      <el-input v-model="dataForm.${column.attrname}" placeholder="$!{column.comment}"></el-input>
+    </el-form-item>
+#end
+#end
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="visible = false">#if(${language} == 0)取消#elseif(${language} == 1)キャンセル#elseif(${language} == 2)Cancel#end</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">#if(${language} == 0)确认#elseif(${language} == 1)確認#elseif(${language} == 2)OK#end</el-button>
+    </span>
+  </el-dialog>
+</template>
+
+<script>
+import { get${className},save${className},update${className} } from '@/api/${moduleName}/${frontPathName}'
+export default {
+  data () {
+    return {
+      visible: false,
+      dataForm: {
+#foreach($column in $columns)
+#if($column.columnName == $pk.columnName)
+        ${column.attrname}: 0,
+#else
+        ${column.attrname}: ''#if($velocityCount != $columns.size()),#end
+
+#end
+#end
+      },
+      dataRule: {
+#foreach($column in $columns)
+#if($column.columnName != $pk.columnName)
+        ${column.attrname}: [
+          { required: true, message: '${column.comment}#if(${language} == 0)不能为空#elseif(${language} == 1)を入力してください#elseif(${language} == 2) can not be blank#end', trigger: 'blur' }
+        ]#if($velocityCount != $columns.size()),#end
+
+#end
+#end
+      }
+    }
+  },
+  methods: {
+    init (id) {
+      this.dataForm.${pk.attrname} = id || 0
+      this.visible = true
+      #[[this.$nextTick(() => {]]#
+        #[[this.$refs['dataForm'].resetFields();]]#
+        if (this.dataForm.${pk.attrname}) {
+          get${className}(this.dataForm.${pk.attrname}).then(response => {
+#foreach($column in $columns)
+            this.dataForm.${column.attrname} = response.data.${column.attrname};
+#end
+          });
+        }
+      });
+    },
+    dataFormSubmit () {
+      #[[this.$refs['dataForm'].validate((valid) => {]]#
+        if (valid) {
+          let data = {
+#foreach($column in $columns)
+#if($column.columnName == $pk.columnName)
+          ${column.attrname}: this.dataForm.${column.attrname} || undefined,
+#else
+          ${column.attrname}: this.dataForm.${column.attrname},
+#end
+#end
+          };
+          if(this.dataForm.${pk.attrname}){
+            update${className}(data).then((response) => {
+              #[[this.$message({]]#
+                message: "Success",
+                type: "success",
+                duration: 1000,
+                onClose: () => {
+                  this.visible = false;
+                  #[[this.$emit("refreshDataList");]]#
+                },
+              });
+            }).catch((error) => {});
+          }else {
+            update${className}(data).then((response) => {
+              #[[this.$message({]]#
+                message: "Success",
+                type: "success",
+                duration: 1000,
+                onClose: () => {
+                  this.visible = false;
+                  #[[this.$emit("refreshDataList");]]#
+                },
+              });
+            }).catch((error) => {});
+          }
+        }
+      });
+    },
+  }
+}
+</script>
