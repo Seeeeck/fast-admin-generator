@@ -3,7 +3,7 @@
     :title="!dataForm.${pk.attrname} ? #if(${language} == 0)'新增'#elseif(${language} == 1)'追加'#elseif(${language} == 2)'Add'#end : #if(${language} == 0)'修改'#elseif(${language} == 1)'変更'#elseif(${language} == 2)'Update'#end"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px">
 #foreach($column in $columns)
 #if($column.columnName != $pk.columnName)
     <el-form-item label="#if(!${column.comment} || $column.comment.equals(""))${column.attrname}#else${column.comment}#end" prop="${column.attrname}">
@@ -39,7 +39,7 @@ export default {
 #foreach($column in $columns)
 #if($column.columnName != $pk.columnName)
         ${column.attrname}: [
-          { required: true, message: '${column.comment}#if(${language} == 0)不能为空#elseif(${language} == 1)を入力してください#elseif(${language} == 2) can not be blank#end', trigger: 'blur' }
+          { required: true, message: '${column.comment}#if(${language} == 0)不能为空#elseif(${language} == 1)を入力してください#elseif(${language} == 2) cannot be empty#end', trigger: 'blur' }
         ]#if($velocityCount != $columns.size()),#end
 
 #end

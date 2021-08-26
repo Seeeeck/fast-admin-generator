@@ -35,9 +35,9 @@
         header-align="center"
         align="center"
         width="150"
-        label="操作">
+        label="#if(${language} == 0 || ${language} == 1)操作#elseif(${language == 2)Operation#end">
         <template #default="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.${pk.attrname})">#if(${language} == 0)修改#elseif(${language} == 1)変更#elseif(${language} == 2)Update#end</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.${pk.attrname})">}#if(${language} == 0)修改#elseif(${language} == 1)変更#elseif(${language == 2)Update#end</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.${pk.attrname})">#if(${language} == 0)删除#elseif(${language} == 1)削除#elseif(${language} == 2)Delete#end</el-button>
         </template>
       </el-table-column>
@@ -78,25 +78,37 @@ export default {
   components: {
     AddOrUpdate
   },
-  activated () {
+  created () {
     this.getDataList()
   },
   methods: {
     getDataList () {
-      this.dataListLoading = true
-      page${className}s({
-        'page': this.pageIndex,
-        'size': this.pageSize,
-        'key': this.dataForm.key
-      }).then(response => {
-        this.dataList = response.data.list
-        this.totalPage = response.data.totalCount
-        this.dataListLoading = false
-      }).catch(() => {
-        this.dataList = []
-        this.totalPage = 0
-        this.dataListLoading = false
-      })
+      if(isAuth('${moduleName}:${pathName}:page')){
+        this.dataListLoading = true
+        page${className}s({
+          'page': this.pageIndex,
+          'size': this.pageSize,
+          'key': this.dataForm.key
+        }).then(response => {
+          this.dataList = response.data.list
+          this.totalPage = response.data.totalCount
+          this.dataListLoading = false
+        }).catch(() => {
+          this.dataList = []
+          this.totalPage = 0
+          this.dataListLoading = false
+        })
+      }else {
+        #[[this.$message.error(]]#
+#if(${language} == 0)
+          "你没有执行这个操作的权限。"
+#elseif(${language} == 1)
+          "この操作をする権限がありません。"
+#elseif(${language} == 2)
+          "You don't have required permission to perform this action."
+#end
+        );
+      }
     },
     sizeChangeHandle (val) {
       this.pageSize = val
