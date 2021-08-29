@@ -87,7 +87,7 @@ export default {
               });
             }).catch((error) => {});
           }else {
-            update${className}(data).then((response) => {
+            save${className}(data).then((response) => {
               #[[this.$message({]]#
                 message: "Success",
                 type: "success",

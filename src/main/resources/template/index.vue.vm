@@ -1,5 +1,5 @@
 <template>
-  <div class="mod-config">
+  <div>
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.key" placeholder="Key" clearable></el-input>
@@ -35,10 +35,10 @@
         header-align="center"
         align="center"
         width="150"
-        label="#if(${language} == 0 || ${language} == 1)操作#elseif(${language == 2)Operation#end">
+        label="#if(${language} == 0 || ${language} == 1)操作#elseif(${language} == 2)Operation#end">
         <template #default="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.${pk.attrname})">}#if(${language} == 0)修改#elseif(${language} == 1)変更#elseif(${language == 2)Update#end</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.${pk.attrname})">#if(${language} == 0)删除#elseif(${language} == 1)削除#elseif(${language} == 2)Delete#end</el-button>
+          <el-button type="text" size="small" v-if="isAuth('${moduleName}:${pathName}:update')" @click="addOrUpdateHandle(scope.row.${pk.attrname})">}#if(${language} == 0)修改#elseif(${language} == 1)変更#elseif(${language} == 2)Update#end</el-button>
+          <el-button type="text" size="small" v-if="isAuth('${moduleName}:${pathName}:delete')" @click="deleteHandle(scope.row.${pk.attrname})">#if(${language} == 0)删除#elseif(${language} == 1)削除#elseif(${language} == 2)Delete#end</el-button>
         </template>
       </el-table-column>
     </el-table>
