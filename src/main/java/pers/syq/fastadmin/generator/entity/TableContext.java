@@ -17,7 +17,7 @@ public class TableContext {
     private String className;
     //类名(第一个字母小写)，如：sys_user => sysUser
     private String classname;
-
+    //sys_user => sysuser
     private String pathName;
     // sys_user => sys-user
     private String frontPathName;

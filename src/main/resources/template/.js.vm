@@ -3,7 +3,7 @@ import request from '@/utils/request';
 
 export function page${className}s(params) {
     return request({
-        url: '/${moduleName}/${pathName}/page',
+        url: '/${moduleName}/${frontPathName}/page',
         method: 'get',
         params
     })
@@ -11,14 +11,14 @@ export function page${className}s(params) {
 
 export function get${className}(${pk.attrname}) {
     return request({
-        url: '/${moduleName}/${pathName}/' + ${pk.attrname},
+        url: '/${moduleName}/${frontPathName}/' + ${pk.attrname},
         method: 'get'
     })
 }
 
 export function save${className}(data) {
     return request({
-        url: '/${moduleName}/${pathName}',
+        url: '/${moduleName}/${frontPathName}',
         method: 'post',
         data
     })
@@ -26,7 +26,7 @@ export function save${className}(data) {
 
 export function update${className}(data) {
     return request({
-        url: '/${moduleName}/${pathName}',
+        url: '/${moduleName}/${frontPathName}',
         method: 'put',
         data
     })
@@ -34,7 +34,7 @@ export function update${className}(data) {
 
 export function delete${className}s(${pk.attrname}s) {
     return request({
-        url: '/${moduleName}/${pathName}/batch',
+        url: '/${moduleName}/${frontPathName}/batch',
         method: 'delete',
         params: { ${pk.attrname}s }
     })

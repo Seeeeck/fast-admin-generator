@@ -25,7 +25,7 @@ import java.util.Map;
  * @date $!{datetime}
  */
 @RestController
-@RequestMapping("${moduleName}/${pathName}")
+@RequestMapping("${moduleName}/${frontPathName}")
 public class ${className}Controller {
     @Autowired
     private ${className}Service ${classname}Service;
@@ -35,7 +35,7 @@ public class ${className}Controller {
     @ApiOperation(value = "queryPage")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:page','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${frontPathName}:page','ROLE_ADMIN')")
 #end
     @GetMapping("/page")
     public R<PageUtils> page(@RequestParam Map<String, Object> params){
@@ -47,7 +47,7 @@ public class ${className}Controller {
     @ApiOperation(value = "getById")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:get','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${frontPathName}:get','ROLE_ADMIN')")
 #end
     @GetMapping("/{${pk.attrname}}")
     public R<${className}Entity> getById(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}){
@@ -59,7 +59,7 @@ public class ${className}Controller {
     @ApiOperation(value = "save")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:save','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${frontPathName}:save','ROLE_ADMIN')")
 #end
     @PostMapping
     public R<?> save(@RequestBody ${className}Entity ${classname}){
@@ -71,7 +71,7 @@ public class ${className}Controller {
     @ApiOperation(value = "update")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:update','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${frontPathName}:update','ROLE_ADMIN')")
 #end
     @PutMapping
     public R<?> update(@RequestBody ${className}Entity ${classname}){
@@ -83,7 +83,7 @@ public class ${className}Controller {
     @ApiOperation(value = "deleteBatch")
 #end
 #if(${enableWebSecurity})
-    @PreAuthorize("hasAnyAuthority('${moduleName}:${pathName}:delete','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('${moduleName}:${frontPathName}:delete','ROLE_ADMIN')")
 #end
     @DeleteMapping("/batch")
     public R<?> deleteBatch(@RequestParam("${pk.attrname}s") List<${pk.attrType}> ${pk.attrname}s){

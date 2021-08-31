@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">Search</el-button>
-        <el-button v-if="isAuth('${moduleName}:${pathName}:save')" type="primary" @click="addOrUpdateHandle()">#if(${language} == 0)新增#elseif(${language} == 1)追加#elseif(${language} == 2)Add#end</el-button>
-        <el-button v-if="isAuth('${moduleName}:${pathName}:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">#if(${language} == 0)批量删除#elseif(${language} == 1)一括削除#elseif(${language} == 2)Batch delete#end</el-button>
+        <el-button v-if="auth.create" type="primary" @click="addOrUpdateHandle()">#if(${language} == 0)新增#elseif(${language} == 1)追加#elseif(${language} == 2)Add#end</el-button>
+        <el-button v-if="auth.delete" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">#if(${language} == 0)批量删除#elseif(${language} == 1)一括削除#elseif(${language} == 2)Batch delete#end</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -37,8 +37,8 @@
         width="150"
         label="#if(${language} == 0 || ${language} == 1)操作#elseif(${language} == 2)Operation#end">
         <template #default="scope">
-          <el-button type="text" size="small" v-if="isAuth('${moduleName}:${pathName}:update')" @click="addOrUpdateHandle(scope.row.${pk.attrname})">}#if(${language} == 0)修改#elseif(${language} == 1)変更#elseif(${language} == 2)Update#end</el-button>
-          <el-button type="text" size="small" v-if="isAuth('${moduleName}:${pathName}:delete')" @click="deleteHandle(scope.row.${pk.attrname})">#if(${language} == 0)删除#elseif(${language} == 1)削除#elseif(${language} == 2)Delete#end</el-button>
+          <el-button type="text" size="small" v-if="auth.update" @click="addOrUpdateHandle(scope.row.${pk.attrname})">}#if(${language} == 0)修改#elseif(${language} == 1)変更#elseif(${language} == 2)Update#end</el-button>
+          <el-button type="text" size="small" v-if="auth.delete" @click="deleteHandle(scope.row.${pk.attrname})">#if(${language} == 0)删除#elseif(${language} == 1)削除#elseif(${language} == 2)Delete#end</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,7 +72,13 @@ export default {
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      auth: {
+        read: this.isAuth('${moduleName}:${frontPathName}:page'),
+        create: this.isAuth('${moduleName}:${frontPathName}:save'),
+        update: this.isAuth('${moduleName}:${frontPathName}:update'),
+        delete: this.isAuth('${moduleName}:${frontPathName}:delete')
+      }
     }
   },
   components: {
@@ -83,7 +89,7 @@ export default {
   },
   methods: {
     getDataList () {
-      if(isAuth('${moduleName}:${pathName}:page')){
+      if(this.auth.read){
         this.dataListLoading = true
         page${className}s({
           'page': this.pageIndex,

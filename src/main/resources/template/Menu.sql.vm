@@ -1,16 +1,16 @@
 -- Menu SQL.Please set parent_id
 INSERT INTO `sys_menu` (`parent_id`, `name`, `path`, `perms`, `type`, `icon`, `order_num`,`hidden`)
-    VALUES ('', '${comments}', '${moduleName}/${pathName}', null, '1', 'config', '6');
+    VALUES ('', '${comments}', '${moduleName}/${frontPathName}', null, '1', 'config', '6');
 
 
 set @parentId = @@identity;
 
 -- Permission SQL
 INSERT INTO `sys_menu` (`parent_id`, `name`, `path`, `perms`, `type`, `icon`, `order_num`,`hidden`)
-    VALUES (@parentId,'Read', null, '${moduleName}:${pathName}:page,${moduleName}:${pathName}:get', 2, null, 0,1);
+    VALUES (@parentId,'Read', null, '${moduleName}:${frontPathName}:page,${moduleName}:${frontPathName}:get', 2, null, 0,1);
 INSERT INTO `sys_menu` (`parent_id`, `name`, `path`, `perms`, `type`, `icon`, `order_num`,`hidden`)
-    VALUES(@parentId, 'Add', null, '${moduleName}:${pathName}:save', 2, null, 1,1);
+    VALUES(@parentId, 'Add', null, '${moduleName}:${frontPathName}:save', 2, null, 1,1);
 INSERT INTO `sys_menu` (`parent_id`, `name`, `path`, `perms`, `type`, `icon`, `order_num`,`hidden`)
-    VALUES (@parentId, 'Update', null, '${moduleName}:${pathName}:update', 2, null, 2,1);
+    VALUES (@parentId, 'Update', null, '${moduleName}:${frontPathName}:update', 2, null, 2,1);
 INSERT INTO `sys_menu` (`parent_id`, `name`, `path`, `perms`, `type`, `icon`, `order_num`,`hidden`)
-    VALUES(@parentId, 'Delete', null, '${moduleName}:${pathName}:delete', 2, null, 3,1);
+    VALUES(@parentId, 'Delete', null, '${moduleName}:${frontPathName}:delete', 2, null, 3,1);
